@@ -565,17 +565,17 @@ namespace D_Tristana
                 var fl1 = _w.GetCircularFarmLocation(rangedMinionsQ, _w.Width);
                 var fl2 = _w.GetCircularFarmLocation(allMinionsQ, _w.Width);
 
-                if (fl1.MinionsHit >= 3 && !Utility.UnderTurret())
+                if (fl1.MinionsHit >= 3 && !_player.UnderTurret())
                 {
                     _w.Cast(fl1.Position);
                 }
-                else if ((fl2.MinionsHit >= 2 || allMinionsQ.Count == 1) && !Utility.UnderTurret())
+                else if ((fl2.MinionsHit >= 2 || allMinionsQ.Count == 1) && !_player.UnderTurret())
                 {
                     _w.Cast(fl2.Position);
                 }
                 else
                     foreach (var minion in allMinionsQ)
-                        if (!Orbwalking.InAutoAttackRange(minion) && !Utility.UnderTurret() &&
+                        if (!Orbwalking.InAutoAttackRange(minion) && !_player.UnderTurret() &&
                             minion.Health < 0.75*_player.GetSpellDamage(minion, SpellSlot.Q))
                             _w.Cast(minion);
             }
