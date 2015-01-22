@@ -295,7 +295,7 @@ namespace D_Corki
             if (Utility.UnderTurret(target) && !diveTower) return;
             var usewhE = (100*(_player.Health/_player.MaxHealth)) > _config.Item("UseWHE").GetValue<Slider>().Value;
             if (useW && _w.IsReady() && usewhE && _player.Distance(target) > Orbwalking.GetRealAutoAttackRange(_player) &&
-                Utility.CountEnemysInRange(1300) <= _config.Item("EnemyC").GetValue<Slider>().Value)
+                ObjectManager.Player.CountEnemiesInRange(1300) <= _config.Item("EnemyC").GetValue<Slider>().Value)
             {
                 if (target != null && _player.Distance(target) > 500)
                     _w.Cast(target.Position, Packets());
@@ -548,9 +548,9 @@ namespace D_Corki
             var iusemppotion = _config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = _player.Mana <=
                                (_player.MaxMana * (_config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (Utility.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (Utility.CountEnemysInRange(800) > 0 ||
+            if (ObjectManager.Player.CountEnemiesInRange(800) > 0 ||
                 (mobs.Count > 0 && _config.Item("ActiveLane").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                  SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))

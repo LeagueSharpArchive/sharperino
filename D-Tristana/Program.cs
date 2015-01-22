@@ -51,8 +51,8 @@ namespace D_Tristana
 
             _w.SetSkillshot(0.25f, 150, 1200, false, SkillshotType.SkillshotCircle);
 
-            _dfg = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ||
-                   Utility.Map.GetMap()._MapType == Utility.Map.MapType.CrystalScar
+            _dfg = Utility.Map.GetMap().Type == Utility.Map.MapType.TwistedTreeline ||
+                   Utility.Map.GetMap().Type == Utility.Map.MapType.CrystalScar
                 ? new Items.Item(3188, 750)
                 : new Items.Item(3128, 750);
             _hextech = new Items.Item(3146, 700);
@@ -373,9 +373,9 @@ namespace D_Tristana
             var iusemppotion = _config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = _player.Mana <=
                                (_player.MaxMana * (_config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (Utility.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (Utility.CountEnemysInRange(800) > 0 ||
+            if (ObjectManager.Player.CountEnemiesInRange(800) > 0 ||
                 (mobs.Count > 0 && _config.Item("ActiveJungle").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                  SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))
@@ -496,7 +496,7 @@ namespace D_Tristana
 
             if (_player.Distance(eTarget) > Orbwalking.GetRealAutoAttackRange(_player) && adstyle && useWd &&
                 _w.IsReady() && usewhE &&
-                Utility.CountEnemysInRange(1300) <= _config.Item("EnemyC").GetValue<Slider>().Value)
+                ObjectManager.Player.CountEnemiesInRange(1300) <= _config.Item("EnemyC").GetValue<Slider>().Value)
             {
                 _w.Cast(eTarget.Position);
             }
@@ -560,7 +560,7 @@ namespace D_Tristana
                 }
             }
             if (usewlane && useW && _w.IsReady() && tristanap &&
-                Utility.CountEnemysInRange(1300) <= _config.Item("Enemylane").GetValue<Slider>().Value)
+                ObjectManager.Player.CountEnemiesInRange(1300) <= _config.Item("Enemylane").GetValue<Slider>().Value)
             {
                 var fl1 = _w.GetCircularFarmLocation(rangedMinionsQ, _w.Width);
                 var fl2 = _w.GetCircularFarmLocation(allMinionsQ, _w.Width);
@@ -634,7 +634,7 @@ namespace D_Tristana
             var emana = _player.Spellbook.GetSpell(SpellSlot.E).ManaCost;
             var rmana = _player.Spellbook.GetSpell(SpellSlot.E).ManaCost;
             if (usew && _player.Mana > wmana && _w.IsReady() && whDmg - 20 > target.Health &&
-                _player.Distance(target) <= _w.Range && !Utility.UnderTurret(target) && Utility.CountEnemysInRange(1300) <= 1)
+                _player.Distance(target) <= _w.Range && !Utility.UnderTurret(target) && ObjectManager.Player.CountEnemiesInRange(1300) <= 1)
             {
                 _w.Cast(EnemyJumb(target));
             }
@@ -646,7 +646,7 @@ namespace D_Tristana
             else if (_e.IsReady() && _w.IsReady() && usee && usew && _player.Mana > wmana + emana &&
                      ehDmg - 20 > target.Health &&
                      _player.Distance(target) > _e.Range && _player.Distance(target) < _e.Range + _w.Range &&
-                     !Utility.UnderTurret(target) && Utility.CountEnemysInRange(1300) <= 1)
+                     !Utility.UnderTurret(target) && ObjectManager.Player.CountEnemiesInRange(1300) <= 1)
             {
                 _w.Cast(target.Position);
                 _e.Cast(target);

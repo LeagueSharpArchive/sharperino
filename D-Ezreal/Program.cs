@@ -76,8 +76,8 @@ namespace D_Ezreal
             _e.SetSkillshot(0.25f, 80f, 1600f, false, SkillshotType.SkillshotCircle);
             _r.SetSkillshot(1f, 160f, 2000f, false, SkillshotType.SkillshotLine);
 
-            _dfg = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ||
-                   Utility.Map.GetMap()._MapType == Utility.Map.MapType.CrystalScar
+            _dfg = Utility.Map.GetMap().Type == Utility.Map.MapType.TwistedTreeline ||
+                   Utility.Map.GetMap().Type == Utility.Map.MapType.CrystalScar
                 ? new Items.Item(3188, 750)
                 : new Items.Item(3128, 750);
             _hextech = new Items.Item(3146, 700);
@@ -613,9 +613,9 @@ namespace D_Ezreal
             var iusemppotion = _config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = _player.Mana <=
                                (_player.MaxMana*(_config.Item("usepotionmp").GetValue<Slider>().Value)/100);
-            if (Utility.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (Utility.CountEnemysInRange(800) > 0 ||
+            if (ObjectManager.Player.CountEnemiesInRange(800) > 0 ||
                 (mobs.Count > 0 && _config.Item("ActiveJungle").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                                                                                                SmiteBlue.Any(
                                                                                                    i => Items.HasItem(i)) ||

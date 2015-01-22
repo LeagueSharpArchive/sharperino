@@ -66,8 +66,8 @@ namespace D_Kayle
             SpellList.Add(_e);
             SpellList.Add(_r);
 
-            _dfg = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ||
-                 Utility.Map.GetMap()._MapType == Utility.Map.MapType.CrystalScar
+            _dfg = Utility.Map.GetMap().Type == Utility.Map.MapType.TwistedTreeline ||
+                 Utility.Map.GetMap().Type == Utility.Map.MapType.CrystalScar
               ? new Items.Item(3188, 750)
               : new Items.Item(3128, 750);
             _rand = new Items.Item(3143, 490f);
@@ -499,10 +499,10 @@ namespace D_Kayle
 
         private static void AutoR()
         {
-            if (_player.HasBuff("Recall") || Utility.InFountain()) return;
+            if (_player.HasBuff("Recall") || ObjectManager.Player.InFountain()) return;
             if (_config.Item("onmeR").GetValue<bool>() && _config.Item("onmeR").GetValue<bool>() &&
                 (_player.Health / _player.MaxHealth) * 100 <= _config.Item("ultiSelfHP").GetValue<Slider>().Value &&
-                _r.IsReady() && Utility.CountEnemysInRange(650) > 0)
+                _r.IsReady() && ObjectManager.Player.CountEnemiesInRange(650) > 0)
             {
                 _r.Cast(_player);
             }
@@ -512,10 +512,10 @@ namespace D_Kayle
         {
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe))
             {
-                if (_player.HasBuff("Recall") || Utility.InFountain()) return;
+                if (_player.HasBuff("Recall") || ObjectManager.Player.InFountain()) return;
                 if (_config.Item("allyR").GetValue<bool>() &&
                     (hero.Health / hero.MaxHealth) * 100 <= _config.Item("ultiallyHP").GetValue<Slider>().Value &&
-                    _r.IsReady() && Utility.CountEnemysInRange(1000) > 0 &&
+                    _r.IsReady() && ObjectManager.Player.CountEnemiesInRange(1000) > 0 &&
                     hero.Distance(_player.ServerPosition) <= _r.Range)
                     if (_config.Item("userally" + hero.BaseSkinName) != null &&
                     _config.Item("userally" + hero.BaseSkinName).GetValue<bool>() == true)
@@ -535,9 +535,9 @@ namespace D_Kayle
             var iusemppotion = _config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = _player.Mana <=
                                (_player.MaxMana * (_config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (Utility.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (Utility.CountEnemysInRange(800) > 0 ||
+            if (ObjectManager.Player.CountEnemiesInRange(800) > 0 ||
                 (mobs.Count > 0 && _config.Item("Activejungle").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                  SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))
@@ -668,7 +668,7 @@ namespace D_Kayle
             _player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             if (_player.Spellbook.CanUseSpell(SpellSlot.W) == SpellState.Ready && _player.IsMe)
             {
-                if (_w.IsReady() && Utility.CountEnemysInRange(1200) > 0)
+                if (_w.IsReady() && ObjectManager.Player.CountEnemiesInRange(1200) > 0)
                 {
                     _player.Spellbook.CastSpell(SpellSlot.W, _player);
                 }
@@ -774,7 +774,7 @@ namespace D_Kayle
             if (_player.Spellbook.CanUseSpell(SpellSlot.W) == SpellState.Ready && _player.IsMe)
             {
 
-                if (_player.HasBuff("Recall") || Utility.InFountain()) return;
+                if (_player.HasBuff("Recall") || ObjectManager.Player.InFountain()) return;
 
                 if (_config.Item("onmeW").GetValue<bool>() && _w.IsReady() &&
                     _player.Health <= (_player.MaxHealth * (_config.Item("healper").GetValue<Slider>().Value) / 100))
@@ -788,10 +788,10 @@ namespace D_Kayle
         {
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe))
             {
-                if (_player.HasBuff("Recall") || hero.HasBuff("Recall") || Utility.InFountain()) return;
+                if (_player.HasBuff("Recall") || hero.HasBuff("Recall") || ObjectManager.Player.InFountain()) return;
                 if (_config.Item("allyW").GetValue<bool>() && 
                     (hero.Health / hero.MaxHealth) * 100 <= _config.Item("allyhealper").GetValue<Slider>().Value &&
-                    _w.IsReady() && Utility.CountEnemysInRange(1200) > 0 &&
+                    _w.IsReady() && ObjectManager.Player.CountEnemiesInRange(1200) > 0 &&
                     hero.Distance(_player.ServerPosition) <= _w.Range )
                     if (_config.Item("usewally" + hero.BaseSkinName) != null &&
                     _config.Item("usewally" + hero.BaseSkinName).GetValue<bool>() == true)
@@ -881,7 +881,7 @@ namespace D_Kayle
             var health = (100 * (_player.Mana / _player.MaxMana)) < _config.Item("healthJ").GetValue<Slider>().Value;
             var mana = (100 * (_player.Mana / _player.MaxMana)) < _config.Item("manaJ").GetValue<Slider>().Value;
             string[] jungleMinions;
-            if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline))
+            if (Utility.Map.GetMap().Type.Equals(Utility.Map.MapType.TwistedTreeline))
             {
                 jungleMinions = new string[] { "TT_Spiderboss", "TT_NWraith", "TT_NGolem", "TT_NWolf" };
             }
@@ -900,7 +900,7 @@ namespace D_Kayle
 
                 foreach (Obj_AI_Base minion in minions)
                 {
-                    if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline) &&
+                    if (Utility.Map.GetMap().Type.Equals(Utility.Map.MapType.TwistedTreeline) &&
                         minion.Health <= smiteDmg &&
                         jungleMinions.Any(name => minion.Name.Substring(0, minion.Name.Length - 5).Equals(name)))
                     {
